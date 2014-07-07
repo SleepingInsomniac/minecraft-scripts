@@ -4,6 +4,7 @@ require "~/server/scripts/Crontab.rb"
 require "~/server/scripts/Minecraft.rb"
 
 stop_time = ARGV[0] || 30 # usage stop_minecraft.rb [delay]
+stop_time = stop_time.to_i
 
 Dir.chdir(File.expand_path(File.dirname(__FILE__))) # server/scripts
 Dir.chdir("..") # server
