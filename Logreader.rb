@@ -12,7 +12,7 @@ class Logreader
     File.expand_path(@file_name)
   end
   
-  def update_mtime
+  def register_change
     mtime_file = File.open("/tmp/#{@file_name}.logreader", "w")
     mtime_file.write(Time.now)
     mtime_file.close
@@ -33,7 +33,7 @@ class Logreader
   end
   
   def changed?
-    last_modified > last_checked ? update_mtime : false
+    last_modified > last_checked
   end
   
   def read_line
@@ -54,7 +54,8 @@ class Logreader
     log = File.open(abs_path, "r")
     log.each_line do |l|
       line = LogLine.new(l)
-      next if line.parse[:time] < check_time
+      next unless parsed = line.parse
+      next if parsed[:time] < check_time
       array.push(line)
     end
     log.close
