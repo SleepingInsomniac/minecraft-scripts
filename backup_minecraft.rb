@@ -65,6 +65,5 @@ end
 server.say("Backup complete!")
 
 Dir.chdir("..")
-File.open("last_update", "w") do |line|
-  line.puts File.mtime('logs/latest.log').strftime("%Y%m%d%H%M%s")
-end
+last_update = File.open("last_update", "w")
+last_update.write(File.mtime('logs/latest.log').strftime("%Y%m%d%H%M%s"))

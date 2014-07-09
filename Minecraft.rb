@@ -8,8 +8,16 @@ class Minecraft
     send_screen('say', message)
   end
   
-  def start(starting_ram = '512M', max_ram = '1024M')
-    puts `screen -S #{@screen_session} -t minecraft_server -dm java -Xms#{starting_ram} -Xmx#{max_ram} -jar minecraft_server.1.7.9.jar nogui`
+  def running?
+    if send_screen("up?").match(/no/i)
+      false
+    else
+      true
+    end
+  end
+  
+  def start(starting_ram = '512M', max_ram = '1024M', jar_file = "server.jar")
+    puts `screen -S #{@screen_session} -t minecraft_server -dm java -Xms#{starting_ram} -Xmx#{max_ram} -jar #{jar_file} nogui`
   end
   
   def stop

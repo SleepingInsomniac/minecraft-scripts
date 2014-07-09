@@ -28,5 +28,5 @@ end
 server.say("Goodbye")
 `sleep 1`
 server.stop
-cron.remove_job("* */3 * * * ruby /home/minecraft/server/scripts/backup_minecraft.rb 2>&1 >> /home/minecraft/backup.log")
-cron.remove_job("* */1 * * * ruby /home/minecraft/server/scripts/update_player_db.rb 2>&1 >> /home/minecraft/player_db.log")
+cron.remove_job("0 */3 * * * ruby /home/minecraft/server/scripts/backup_minecraft.rb 2>&1 >> /home/minecraft/backup.log")
+cron.remove_job("*/15 * * * * ruby /home/minecraft/server/scripts/update_player_db.rb 2>&1 >> /home/minecraft/player_db.log")
