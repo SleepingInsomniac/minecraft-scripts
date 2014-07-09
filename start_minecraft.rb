@@ -13,7 +13,7 @@ cron = Crontab.new
 
 if server.running?
   puts "Server is already running."
-end
+else
   server.start
 end
 
