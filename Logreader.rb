@@ -1,6 +1,6 @@
 class Logreader
   
-  def initialize (log_dir = "", file_name = "latest.log")
+  def initialize (log_dir = ".", file_name = "latest.log")
     @file_name = file_name
     @log_dir = log_dir
   end
@@ -8,8 +8,7 @@ class Logreader
   attr_reader :file_name
   
   def abs_path
-    Dir.chdir @log_dir
-    File.expand_path(@file_name)
+    File.expand_path(@log_dir + "/" + @file_name)
   end
   
   def register_change

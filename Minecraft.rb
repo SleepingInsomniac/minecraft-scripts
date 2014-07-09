@@ -8,6 +8,10 @@ class Minecraft
     send_screen('say', message)
   end
   
+  def whisper(player, message)
+    send_screen("w #{player}", message)
+  end
+  
   def running?
     if send_screen("up?").match(/no/i)
       false
