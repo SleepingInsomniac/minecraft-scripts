@@ -11,12 +11,11 @@ Dir.chdir("..")
 server = Minecraft.new
 cron = Crontab.new
 
-server.start
-
-unless cron.add_job("0 */3 * * * ruby /home/minecraft/server/scripts/backup_minecraft.rb 2>&1 >> /home/minecraft/backup.log")
-  puts "Backup cron job was already loaded."
+if server.running?
+  puts "Server is already running."
+end
+  server.start
 end
 
-unless cron.add_job("*/15 * * * * ruby /home/minecraft/server/scripts/update_player_db.rb 2>&1 >> /home/minecraft/player_db.log")
-  puts "Update players cron job was already loaded"
-end
+puts "Backup cron job was already loaded." unless cron.add_job("0 */3 * * * ruby /home/minecraft/server/scripts/backup_minecraft.rb 2>&1 >> /home/minecraft/backup.log")
+puts "Update players cron job was already loaded" unless cron.add_job("*/15 * * * * ruby /home/minecraft/server/scripts/update_player_db.rb 2>&1 >> /home/minecraft/player_db.log")
