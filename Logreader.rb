@@ -36,8 +36,25 @@ class Logreader
     last_modified > last_checked ? update_mtime : false
   end
   
-  def last_lines(n = 1)
+  def read_line
+    read_lines
+  end
+  
+  def read_lines(n = 1)
     `tail -n#{n} #{abs_path}`
+  end
+  
+  def parse_line(line)
+    matches = line.match(/^\[(\d{2}:\d{2}:\d{2})\] \[([^\]]+)\]: (.+$)/i)
+    begin
+      line = {
+        :time => matches[1].to_s,
+        :info => matches[2].to_s,
+        :msg => matches[3].to_s,
+      }
+    rescue
+      false
+    end
   end
   
 end
