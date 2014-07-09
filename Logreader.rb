@@ -8,7 +8,7 @@ class Logreader
   attr_reader :file_name
   
   def abs_path
-    # Dir.chdir @log_dir
+    Dir.chdir @log_dir
     File.expand_path(@file_name)
   end
   
@@ -37,11 +37,15 @@ class Logreader
   end
   
   def read_line
-    read_lines
+    read_lines(1)[0]
   end
   
   def read_lines(n = 1)
-    `tail -n#{n} #{abs_path}`
+    array = []
+    `tail -n#{n} #{abs_path}`.each_line do |l|
+      array.push(LogLine.new(l))
+    end
+    array
   end
   
   def parse_line(line)
@@ -54,6 +58,23 @@ class Logreader
       }
     rescue
       false
+    end
+  end
+  
+end
+
+class LogLine < String
+  
+  def parse
+    matches = match(/^\[(\d{2}:\d{2}:\d{2})\] \[([^\]]+)\]: (.+$)/i)
+    begin
+      line = {
+        :time => matches[1].to_s,
+        :info => matches[2].to_s,
+        :msg => matches[3].to_s,
+      }
+    rescue
+      nil
     end
   end
   
