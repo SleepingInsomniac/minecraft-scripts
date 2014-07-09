@@ -48,17 +48,17 @@ class Logreader
     array
   end
   
-  def parse_line(line)
-    matches = line.match(/^\[(\d{2}:\d{2}:\d{2})\] \[([^\]]+)\]: (.+$)/i)
-    begin
-      line = {
-        :time => matches[1].to_s,
-        :info => matches[2].to_s,
-        :msg => matches[3].to_s,
-      }
-    rescue
-      false
+  def since_last
+    array = []
+    check_time = last_checked.strftime("%H:%M:%S")
+    log = File.open(abs_path, "r")
+    log.each_line do |l|
+      line = LogLine.new(l)
+      next if line.parse[:time] < check_time
+      array.push(line)
     end
+    log.close
+    array
   end
   
 end
