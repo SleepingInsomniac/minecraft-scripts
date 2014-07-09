@@ -8,7 +8,7 @@ class Logreader
   attr_reader :file_name
   
   def abs_path
-    Dir.chdir @log_dir
+    # Dir.chdir @log_dir
     File.expand_path(@file_name)
   end
   
@@ -34,6 +34,10 @@ class Logreader
   
   def changed?
     last_modified > last_checked ? update_mtime : false
+  end
+  
+  def last_lines(n = 1)
+    `tail -n#{n} #{abs_path}`
   end
   
 end

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require "~/server/scripts/Crontab.rb"
-require "~/server/scripts/Minecraft.rb"
+require_relative "Crontab.rb"
+require_relative "Minecraft.rb"
 
 def remove_crons
   cron = Crontab.new

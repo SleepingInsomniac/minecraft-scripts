@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require "~/server/scripts/Crontab.rb"
-require "~/server/scripts/Minecraft.rb"
+require_relative "Crontab.rb"
+require_relative "Minecraft.rb"
 
 # server/scripts
 Dir.chdir(File.expand_path(File.dirname(__FILE__)))

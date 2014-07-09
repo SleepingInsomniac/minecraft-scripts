@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+require 'json'
+require 'mysql2'
+require 'zlib'
+
 def get_players(path)
 
   file = File.new(path)
@@ -27,10 +31,6 @@ def get_players(path)
   players
   
 end
-
-require 'json'
-require 'mysql2'
-require 'zlib'
 
 path = ARGV[0] || File.expand_path(File.dirname(__FILE__))+"/../logs"
 
