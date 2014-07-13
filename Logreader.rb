@@ -22,7 +22,7 @@ class Logreader
     begin
       File.mtime("/tmp/#{@file_name}.logreader")
     rescue
-      update_mtime
+      register_change
       retry
     end
   end
