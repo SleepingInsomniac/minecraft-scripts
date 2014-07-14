@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Crontab
   
   def get_jobs
