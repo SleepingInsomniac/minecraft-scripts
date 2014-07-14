@@ -1,69 +1,31 @@
 #!/usr/bin/env ruby
 
-# require_relative "Crontab.rb"
 require_relative "Minecraft.rb"
+
+time = ARGV[0] || 30
 
 # server/scripts
 Dir.chdir(File.expand_path(File.dirname(__FILE__)))
-# server
-Dir.chdir("..")
-
+# server/world
+Dir.chdir("../world")
 server = Minecraft.new
 
+server.say "Backing up in #{time} seconds"
 
-last_update = File.mtime('logs/latest.log').strftime("%Y%m%d%H%M%s")
-unless File.exists?("last_update")
-  `touch last_update`
-end
-
-last_mod = ""
-File.open("last_update", "r") do |file|
-  while line = file.gets
-    last_mod +=line
+(time - 5).times {
+  time -= 1
+  `sleep 1`
+  if time == 10
+    server.say "Backing up in 10 seconds."
   end
+}
+
+time.downto(0) do |t|
+  server.say "Backing up in #{t}..."
 end
 
-puts "last update: #{last_update}"
-puts "last file mod: #{last_mod}"
-
-if last_mod.chomp == last_update
-  puts "Nothing noticable has happened"
-  exit
-end
-
-server.say("Backing up world files in 30 seconds...")
-`sleep 30`
-server.say("Backing up world files...")
+server.say "Backing up!"
 server.save_all
-
-# backup...
-unless Dir.exists?("backups")
-  Dir.mkdir("backups")
-end
-
-Dir.chdir("backups")
-backup_dir = Time.now.strftime("%Y-%m-%d-%H")
-
-`tar -zcvf #{backup_dir}.tar.gz ../world`
-server.say("Backup saved as #{backup_dir}.tar.gz!")
-
-cutoff = Time.now - 60*60*24 * 2
-
-Dir.foreach(".") do |file|
-
-  next if file == __FILE__
-     
-  mod_date = File.atime(file)
-
-  if (mod_date < cutoff)
-    server.say("Removing old backup #{file}")
-    File.unlink file
-  end
-
-end
-
-server.say("Backup complete!")
-
-Dir.chdir("..")
-last_update = File.open("last_update", "w")
-last_update.write(File.mtime('logs/latest.log').strftime("%Y%m%d%H%M%s"))
+`git add .`
+`git commit -m "Regularly scheduled World backup"`
+server.say "Done!"

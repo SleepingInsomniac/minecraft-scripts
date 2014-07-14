@@ -10,25 +10,28 @@ require 'yaml'
 class ChangeLog
   
   def initialize(directory)
-    @directory = directory
+    @directory = File.expand_path directory
   end
   
   attr_reader :directory
   
   def read_files(dir = @directory, paths = [])
-    Dir.chdir dir
     paths.push dir
+    dir = paths.join("/")
+    unless File.directory?(dir)
+      puts "#{dir} Is not a directory!"
+      return false
+    end
     file_hash = Hash.new
-    Dir.foreach(".") do |file|
+    Dir.foreach dir do |file|
       next if file[0] == "."
-      if File.directory? File.expand_path file
-        file_hash[paths.join("/")] = read_files(file, paths)
+      if File.directory?(File.join(dir, file))
+        file_hash[File.join(dir, file)] = read_files(file, paths)
+        paths.pop
       else
-        file_hash[paths.join("/")+"/#{file}"] = File.mtime(file).to_s
+        file_hash[File.join(dir,file)] = File.mtime(File.join(dir,file)).to_s
       end      
     end
-    
-    Dir.chdir ".."
     file_hash
   end 
   
