@@ -29,7 +29,7 @@ end
 
 server.say "Backing up!"
 `sleep 1`
-`cp world/* world_git/`
+`cp -r world/* world_git/`
 Dir.chdir("world_git")
 `git add .`
 puts `git commit -m "Regularly scheduled World backup"`
