@@ -3,14 +3,16 @@
 require_relative "Minecraft.rb"
 
 time = ARGV[0] || 30
+time = time.to_i
 
 # server/scripts
 Dir.chdir(File.expand_path(File.dirname(__FILE__)))
-# server/world
-Dir.chdir("../world")
+# server
+Dir.chdir("..")
 server = Minecraft.new
 
 server.say "Backing up in #{time} seconds"
+server.save_all
 
 (time - 5).times {
   time -= 1
@@ -26,7 +28,9 @@ time.downto(0) do |t|
 end
 
 server.say "Backing up!"
-server.save_all
+`sleep 1`
+`cp world/* world_git/`
+Dir.chdir("world_git")
 `git add .`
 puts `git commit -m "Regularly scheduled World backup"`
 server.say "Done!"
