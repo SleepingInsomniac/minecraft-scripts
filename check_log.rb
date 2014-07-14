@@ -14,7 +14,6 @@ while true do
   if log.changed?
     log.since_last.each do |l|
       line = l.parse
-      # server.say "#{line}"
       if player = line[:msg].match(/(\S+) joined the game$/i)
         server.whisper player[1], "Welcome to Pixelfaucet #{player[1]}!"
         server.whisper player[1], "http://minecraft.pixelfaucet.com"
@@ -24,11 +23,11 @@ while true do
       if command = line[:msg].match(/^\<(\S+)\>\s*\!([a-z]+)$/i)
         p = command[1]
         c = command[2].downcase
-        server.say "#{p}'s Command was #{command[2]}"
+        # server.say "#{p}'s Command was #{command[2]}"
         if p == "SlpingInsomniac"
           case c
           when "backup"
-            `./../scripts/backup_minecraft.rb`
+            `./../scripts/backup_minecraft.rb 0`
           end
         end
         case c
@@ -36,8 +35,21 @@ while true do
           server.say "I know the the following commands:"
           server.say "!info - this message"
           server.say "!web - website"
-        when c.match(/^(web|site|website)$/)
-          server.say "Pixelfaucet.com"
+          server.say "!rules - Server rules"
+          server.say "!grief - report a griefing incident"
+        when "web"
+          server.say "http://minecraft.Pixelfaucet.com"
+        when "rules"
+          server.say "1. No griefing"
+          server.say "2. No looting/raiding"
+          server.say "3. No hacked clients"
+          server.say "4. PvP is enabled, but don't be a jerk."
+          server.say "Respect your fellow players."
+        when "grief"
+          puts "#{Time.now} #{p} reports griefing"
+          server.command "tp" "#{p} ~ ~ ~"
+          server.whisper p, "Your report has been submitted."
+          server.whisper p, "A mod will look into the issue ASAP."
         end
       end
     end

@@ -5,15 +5,15 @@ class Minecraft
   end
   
   def say(message)
-    send_screen('say', message)
+    command('say', message)
   end
   
   def whisper(player, message)
-    send_screen("w #{player}", message)
+    command("w #{player}", message)
   end
   
   def running?
-    if send_screen("up?").match(/no/i)
+    if command("up?").match(/no/i)
       false
     else
       true
@@ -25,15 +25,14 @@ class Minecraft
   end
   
   def stop
-    send_screen('stop')
+    command('stop')
   end
 
   def save_all
-    send_screen('save-all')
+    command('save-all')
   end
   
-  private
-  def send_screen(command, arguments = "")
+  def command(command, arguments = "")
     `screen -S #{@screen_session} -X stuff "\`printf "#{command} #{arguments}\r"\`"`
   end
   
