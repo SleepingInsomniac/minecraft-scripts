@@ -31,6 +31,12 @@ class Minecraft
   def save_all
     command('save-all')
   end
+  def save_off
+    command('save-off')
+  end
+  def save_on
+    command('save-on')
+  end
   
   def command(command, arguments = "")
     `screen -S #{@screen_session} -X stuff "\`printf "#{command} #{arguments}\r"\`"`

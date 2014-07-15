@@ -20,6 +20,10 @@ while true do
         server.whisper player[1], "For info/rules type !info or !rules"
         puts "Greeting player #{player[1]}"
       end
+      if command = line[:msg].match(/^(\S+) was kicked for floating too long!$/i)
+        p = command[1]
+        server.say "Kicked #{p} for flying. Repeated offenses will result in ban."
+      end
       if command = line[:msg].match(/^\<(\S+)\>\s*\!([a-z]+)$/i)
         p = command[1]
         c = command[2].downcase

@@ -14,23 +14,20 @@ server = Minecraft.new
 server.say "Backing up in #{time} seconds"
 server.save_all
 
-(time - 5).times {
-  time -= 1
-  if time == 10
-    server.say "Backing up in 10 seconds."
-  end
+time.times {
   `sleep 1`
+  if time == 10 or time == 5
+    server.say "Backing up in #{time} seconds."
+  end
+  time -= 1
 }
 
-time.downto(0) do |t|
-  server.say "Backing up in #{t}..."
-  `sleep 1`
-end
-
 server.say "Backing up!"
-`sleep 1`
-`cp -r world/* world_git/`
-Dir.chdir("world_git")
+server.save_off
+`sleep 2`
+# `cp -r world/* world_git/`
+Dir.chdir("world")
 `git add .`
 puts `git commit -m "Regularly scheduled World backup"`
 server.say "Done!"
+server.save_on
